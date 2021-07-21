@@ -1,0 +1,3 @@
+sci
+*.tab.*
+*.lex.c

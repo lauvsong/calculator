@@ -4,6 +4,7 @@
 #include "sci.h"
 %}
 
+%define parse.error verbose
 %union {
     struct ast *a;
     double d;
@@ -15,6 +16,7 @@
 %token<d> NUMBER
 %token<s> NAME
 %token<fn> FUNC
+%token FEED
 %token EOL
 
 %token IF THEN ELSE WHILE DO LET
@@ -39,7 +41,7 @@ stmt: IF exp THEN list  { $$ = newflow('I', $2, $4, NULL);}
 ;
 
 list: /* nothing */ {$$ = NULL;}
-| stmt ';' list { 
+| stmt FEED list { 
     if($3 = NULL) $$ = $1;
     else $$=newast('L', $1, $3);
 }
@@ -61,22 +63,20 @@ exp: exp CMP exp        { $$ = newcmp($2, $1, $3);}
 ;
 
 explist: exp
-| exp ',' explist   {$$ = newast('L', $1, $3);}
+| exp ',' explist       {$$ = newast('L', $1, $3);}
 ;
-symlist: NAME   {$$ = newsymlist($1, NULL);}
-| NAME ',' symlist  {$$ = newsymlist($1, $3);}
+symlist: NAME           {$$ = newsymlist($1, NULL);}
+| NAME ',' symlist      {$$ = newsymlist($1, $3);}
 ;
 
-calclist:
+calclist:   /* nothing */
 | calclist stmt EOL {
     printf("= %4.4g\n>", eval($2));
     treefree($2);
-}
+    }
 | calclist LET NAME '(' symlist ')' '=' list EOL {
     dodef($3, $5, $8);
     printf("Defined %s\n>", $3->name);
-}
-| calclist error EOL { yyerrok; printf("> ");}
-;
+    }
 
 %%

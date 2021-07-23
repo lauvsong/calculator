@@ -17,9 +17,11 @@ EXP ([Ee][-+]?[0-9]+)
 "=" |
 "|" |
 "," |
-";" |
 "(" |
 ")" { return yytext[0]; }
+
+";" |
+"\\\\\\" { return FEED; }
 
 ">" { yylval.fn = 1; return CMP; }
 "<" { yylval.fn = 2; return CMP; }

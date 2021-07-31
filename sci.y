@@ -37,6 +37,7 @@
 stmt: IF exp THEN list  { $$ = newflow('I', $2, $4, NULL);}
 | IF exp THEN list ELSE list    {$$ = newflow('I', $2, $4, $6);}
 | WHILE exp DO list     { $$ = newflow('W', $2, $4, NULL);}
+| exp FEED list
 | exp
 ;
 
@@ -45,6 +46,7 @@ list: /* nothing */ {$$ = NULL;}
     if($3 = NULL) $$ = $1;
     else $$=newast('L', $1, $3);
 }
+| stmt
 ;
 
 exp: exp CMP exp        { $$ = newcmp($2, $1, $3);}

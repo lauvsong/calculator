@@ -42,6 +42,7 @@ EXP ([Ee][-+]?[0-9]+)
 "exp" { yylval.fn = B_exp; return BFUNC; }
 "log" { yylval.fn = B_log; return BFUNC; }
 "print" { yylval.fn = B_print; return BFUNC; }
+"run" {return RUN;}
 
 [a-zA-Z][a-zA-Z0-9]* {yylval.s = lookup(yytext); return NAME;}
 
@@ -65,7 +66,7 @@ int main(int argc, char **argv)
             return 1;
         }
         yyin = f;
-        printf("> ");
+        printf(">");
         while (yyparse() != 0);
         fclose(f);
         return 0;

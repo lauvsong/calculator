@@ -17,6 +17,7 @@
 %token<s> NAME
 %token<fn> BFUNC
 %token FEED
+%token RUN
 %token EOL
 
 %token IF THEN ELSE WHILE DO LET UFUNC
@@ -43,10 +44,13 @@ stmt: IF exp THEN list  { $$ = newflow('I', $2, $4, NULL);}
 
 list: /* nothing */ {$$ = NULL;}
 | stmt FEED list { 
+    printf("= %4.4g\n>", eval($1));
     if($3 = NULL) $$ = $1;
     else $$=newast('L', $1, $3);
 }
-| stmt
+| stmt {
+    printf("= %4.4g\n>", eval($1));
+}
 ;
 
 exp: exp CMP exp        { $$ = newcmp($2, $1, $3);}

@@ -36,11 +36,12 @@ EXP ([Ee][-+]?[0-9]+)
 "while" { return WHILE; }
 "do" { return DO; }
 "let" { return LET;}
+"function" { return UFUNC; }
 
-"sqrt"  {yylval.fn = B_sqrt; return FUNC;}
-"exp" { yylval.fn = B_exp; return FUNC; }
-"log" { yylval.fn = B_log; return FUNC; }
-"print" { yylval.fn = B_print; return FUNC; }
+"sqrt"  {yylval.fn = B_sqrt; return BFUNC;}
+"exp" { yylval.fn = B_exp; return BFUNC; }
+"log" { yylval.fn = B_log; return BFUNC; }
+"print" { yylval.fn = B_print; return BFUNC; }
 
 [a-zA-Z][a-zA-Z0-9]* {yylval.s = lookup(yytext); return NAME;}
 

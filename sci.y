@@ -15,11 +15,11 @@
 
 %token<d> NUMBER
 %token<s> NAME
-%token<fn> FUNC
+%token<fn> BFUNC
 %token FEED
 %token EOL
 
-%token IF THEN ELSE WHILE DO LET
+%token IF THEN ELSE WHILE DO LET UFUNC
 
 %nonassoc<fn> CMP
 %right '='
@@ -57,8 +57,8 @@ exp: exp CMP exp        { $$ = newcmp($2, $1, $3);}
 | '-' exp %prec UMINUS  {$$ = newast('M', $2, NULL);}
 | NUMBER                {$$ = newnum($1);}
 | NAME                  {$$ = newref($1);}
-| NAME '=' exp          {$$ = newasgn($1, $3);}
-| FUNC '(' explist ')'  {$$ = newfunc($1, $3);}
+| LET NAME '=' exp          {$$ = newasgn($2, $4);}
+| BFUNC '(' explist ')'  {$$ = newfunc($1, $3);}
 | NAME '(' explist ')'  {$$ = newcall($1, $3);}
 ;
 
@@ -74,9 +74,12 @@ calclist:   /* nothing */
     printf("= %4.4g\n>", eval($2));
     treefree($2);
     }
-| calclist LET NAME '(' symlist ')' '=' list EOL {
+| calclist UFUNC NAME '(' symlist ')' '=' list EOL {
     dodef($3, $5, $8);
     printf("Defined %s\n>", $3->name);
     }
+| calclist LET NAME '=' list EOL {
+    newasgn($3, $5);
+}
 
 %%

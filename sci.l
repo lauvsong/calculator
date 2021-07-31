@@ -55,3 +55,22 @@ EXP ([Ee][-+]?[0-9]+)
 
 .    { yyerror("Mystery character %c\n", *yytext); }
 %%
+
+int main(int argc, char **argv)
+{
+    if (argc > 1){
+        FILE *f = fopen(argv[1], "r");
+        if(!f) {
+            perror(argv[1]);
+            return 1;
+        }
+        yyin = f;
+        printf("> ");
+        while (yyparse() != 0);
+        fclose(f);
+        return 0;
+    }
+    printf("> ");
+    while (yyparse() != 0);
+    return 0;
+}

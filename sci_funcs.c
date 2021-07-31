@@ -411,9 +411,3 @@ yyerror(char *s, ...){
   vfprintf(stderr, s, ap);
   fprintf(stderr, "\n");
 }
-
-int 
-main(){
-    printf("> ");
-    yyparse();
-}

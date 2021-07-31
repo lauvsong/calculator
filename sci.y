@@ -80,8 +80,5 @@ calclist:   /* nothing */
     dodef($3, $5, $8);
     printf("Defined %s\n>", $3->name);
     }
-| calclist LET NAME '=' list EOL {
-    newasgn($3, $5);
-}
 
 %%
